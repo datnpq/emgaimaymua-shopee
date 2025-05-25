@@ -3,7 +3,15 @@ const express = require('express');
 const app = express();
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '7867409184:AAEnGQgPv-5XXxBCgwgNXLoLSAq9VV3tVvk';
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token, {
+  polling: {
+    interval: 1000,       // mỗi giây check 1 lần
+    autoStart: true,
+    params: {
+      timeout: 10
+    }
+  }
+});
 
 // Khi user bấm /start
 bot.onText(/\/start/, (msg) => {
