@@ -1,7 +1,11 @@
 const TelegramBot = require('node-telegram-bot-api');
-const token = '7867409184:AAEnGQgPv-5XXxBCgwgNXLoLSAq9VV3tVvk';
+const express = require('express');
+const app = express();
+
+const token = process.env.TELEGRAM_BOT_TOKEN || '7867409184:AAEnGQgPv-5XXxBCgwgNXLoLSAq9VV3tVvk';
 const bot = new TelegramBot(token, { polling: true });
 
+// Khi user bấm /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const username = msg.from.username || `user${msg.from.id}`;
@@ -16,4 +20,14 @@ bot.onText(/\/start/, (msg) => {
   };
 
   bot.sendMessage(chatId, `👋 Chào bạn ${username}!\nĐại đại đi 🤭`, opts);
+});
+
+// Dummy web để giữ bot sống trên Render
+app.get('/', (req, res) => {
+  res.send('🤖 Telegram bot is running...');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🌐 Bot server is live at port ${PORT}`);
 });
